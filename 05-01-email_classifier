@@ -1,0 +1,22 @@
+import tensorflow as tf
+import numpy as np
+x = np.array([[1.0, 0.0, 1.0]])
+
+ip_hid = np.array([
+    [0.5, 0.4],
+    [-0.2, 0.1],
+    [0.3, -0.5]
+])
+
+op_hid = np.array([
+    [0.7],
+    [0.2]
+])
+
+hid = np.dot(x,ip_hid)
+output_raw = np.dot(hid,op_hid)
+output = tf.sigmoid(output_raw)
+
+print(hid)
+print(output)
+
