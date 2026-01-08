@@ -2,7 +2,7 @@
 
 08/01/2026 - implemented Text similarity detection (hugging face)
 
-08/01/2026 - implemented sentiment analysis
+08/01/2026 - implemented sentiment analysis (hugging face)
 
            
 
