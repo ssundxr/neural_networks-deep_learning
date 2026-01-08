@@ -1,0 +1,12 @@
+from sentence_transformers import SentenceTransformer, util
+
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+text1 = "what are you doing"
+text2 = "enna da pandra"
+
+emb1 = model.encode(text1)
+emb2 = model.encode(text2)
+
+score = util.cos_sim(emb1, emb2)
+print(score)
