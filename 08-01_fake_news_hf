@@ -1,0 +1,21 @@
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
+
+tokenizer = AutoTokenizer.from_pretrained(
+    "mrm8488/bert-tiny-finetuned-fake-news-detection"
+)
+model = AutoModelForSequenceClassification.from_pretrained(
+    "mrm8488/bert-tiny-finetuned-fake-news-detection"
+)
+
+text = "Aliens landed on earth yesterday"
+
+
+inputs = tokenizer(text, return_tensors="pt")
+
+
+with torch.no_grad():
+    outputs = model(**inputs)
+
+label = torch.argmax(outputs.logits).item()
+print("News:", "FAKE" if label == 1 else "REAL")
