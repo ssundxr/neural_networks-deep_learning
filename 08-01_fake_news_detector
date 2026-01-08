@@ -1,0 +1,10 @@
+from transformers import pipeline
+
+fake_news = pipeline(
+    "text-classification",
+    model="mrm8488/bert-tiny-finetuned-fake-news-detection"
+)
+
+text = "Aliens landed in India yesterday"
+
+print(fake_news(text))
