@@ -1,0 +1,8 @@
+from transformers import pipeline
+
+sentiment = pipeline("sentiment-analysis")
+
+text = "I really like this product"
+
+result = sentiment(text)
+print(result)
