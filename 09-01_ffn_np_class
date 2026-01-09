@@ -1,0 +1,32 @@
+import numpy as np
+class SimpleNeuralNetwork:
+    def __init__(self):
+        self.W = np.array([
+            [0.1, 0.3],
+            [0.6, 0.8],
+            [0.6, 0.3]
+        ])
+        self.b1 = np.array([0.01, 0.02])
+        self.b2 = 0.01
+    def sigmoid(self, x):
+        return 1 / (1 + np.exp(-x))
+    def forward(self, x):
+        
+        z1 = np.dot(x, self.W) + self.b1
+        h = self.sigmoid(z1)
+        z2 = np.sum(h) + self.b2
+        y_pred = self.sigmoid(z2)
+
+        return y_pred
+
+    def loss(self, y, y_pred):
+        
+        return -(y * np.log(y_pred) + (1 - y) * np.log(1 - y_pred))
+
+x = np.array([0.5, 0.2, 0.1])
+y = 1
+model = SimpleNeuralNetwork()
+y_pred = model.forward(x)
+loss = model.loss(y, y_pred)
+print("Predicted output:", y_pred)
+print("Loss:", loss)
