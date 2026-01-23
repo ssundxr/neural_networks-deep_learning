@@ -16,6 +16,6 @@ LAB - 01 - 09/01/2026
 
 LAB - 02 - 16/01/2026
 
-            ABSENT
+            23/01/2026 - MNIST PREDICTION - HAND wrITTEN
 
 LAB - 03 - 23/01/2026
