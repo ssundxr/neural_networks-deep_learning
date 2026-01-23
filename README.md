@@ -9,5 +9,10 @@ LAB - 01 - 09/01/2026
 
             09/01/2026 - Impleneted simple feed forward network-Tensorflow
 
-            
+            09/01/2026 - Impleneted simple feed forward network-pytorch
 
+LAB - 02 - 16/01/2026
+
+            ABSENT
+
+LAB - 03 - 23/01/2026
