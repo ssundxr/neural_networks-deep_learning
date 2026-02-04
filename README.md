@@ -19,3 +19,8 @@ LAB - 02 - 16/01/2026
             23/01/2026 - MNIST PREDICTION - HAND wrITTEN
 
 LAB - 03 - 23/01/2026
+
+
+CLASS - 04/02/2026
+
+            04/02/2026 - CNN_BODYPART.ipynb
