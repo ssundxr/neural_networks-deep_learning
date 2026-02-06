@@ -11,7 +11,7 @@ LAB - 01 - 09/01/2026
 
             09/01/2026 - Impleneted simple feed forward network-pytorch
 
-            RESULT : <img width="515" height="431" alt="image" src="https://github.com/user-attachments/assets/8f3039cd-3eef-45ef-8e19-994be45c9bb3" />
+           result : <img width="515" height="431" alt="result_01" src="https://github.com/user-attachments/assets/3e168685-0586-4a4c-8de1-da96ad7e5c3a" />
 
 
 LAB - 02 - 16/01/2026
