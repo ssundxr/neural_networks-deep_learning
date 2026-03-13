@@ -1,0 +1,103 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense
+ 
+print("TF version:", tf.__version__)
+ 
+ 
+
+np.random.seed(42)
+n = 365
+ 
+# Simulate 1 year of daily temperatures with seasonal pattern + noise
+days = np.arange(n)
+temps = 20 + 15 * np.sin(2 * np.pi * days / 365) + np.random.randn(n) * 2
+ 
+plt.figure(figsize=(12, 3))
+plt.plot(temps, color='steelblue')
+plt.title("Generated Daily Temperatures (1 Year)")
+plt.xlabel("Day"); plt.ylabel("Temperature (°C)")
+plt.grid(alpha=0.3); plt.show()
+
+SEQ_LEN = 7  # use last 7 days to predict next day
+ 
+# Normalize to [0, 1]
+t_min, t_max = temps.min(), temps.max()
+norm = (temps - t_min) / (t_max - t_min)
+ 
+# Build X (input sequences) and y (next value)
+X, y = [], []
+for i in range(len(norm) - SEQ_LEN):
+    X.append(norm[i : i + SEQ_LEN])
+    y.append(norm[i + SEQ_LEN])
+ 
+X = np.array(X).reshape(-1, SEQ_LEN, 1)  # shape: (samples, timesteps, 1)
+y = np.array(y)
+ 
+# Train / test split (80/20)
+split = int(len(X) * 0.8)
+X_train, X_test = X[:split], X[split:]
+y_train, y_test = y[:split], y[split:]
+ 
+print(f"Train: {X_train.shape}  |  Test: {X_test.shape}")
+
+model = Sequential([
+    LSTM(32, input_shape=(SEQ_LEN, 1)),
+    Dense(1)
+])
+ 
+model.compile(optimizer='adam', loss='mse')
+model.summary()
+ 
+history = model.fit(
+    X_train, y_train,
+    validation_data=(X_test, y_test),
+    epochs=50,
+    batch_size=16,
+    verbose=1
+)
+
+plt.figure(figsize=(8, 3))
+plt.plot(history.history['loss'],     label='Train Loss')
+plt.plot(history.history['val_loss'], label='Val Loss')
+plt.title("Training Loss"); plt.xlabel("Epoch"); plt.ylabel("MSE")
+plt.legend(); plt.grid(alpha=0.3); plt.show()
+
+pred_norm = model.predict(X_test).flatten()
+pred = pred_norm * (t_max - t_min) + t_min
+actual = y_test * (t_max - t_min) + t_min
+ 
+mae = np.mean(np.abs(pred - actual))
+print(f"Test MAE: {mae:.2f} °C")
+ 
+plt.figure(figsize=(12, 4))
+plt.plot(actual, label='Actual',    color='steelblue')
+plt.plot(pred,   label='Predicted', color='tomato', alpha=0.8)
+plt.title(f"Actual vs Predicted Temperatures (MAE = {mae:.2f}°C)")
+plt.xlabel("Day"); plt.ylabel("Temperature (°C)")
+plt.legend(); plt.grid(alpha=0.3); plt.show()
+
+last_seq = norm[-SEQ_LEN:].reshape(1, SEQ_LEN, 1)
+tomorrow_norm = model.predict(last_seq)[0][0]
+tomorrow = tomorrow_norm * (t_max - t_min) + t_min
+ 
+print(f"Today's temp    : {temps[-1]:.1f} °C")
+print(f"Tomorrow's pred : {tomorrow:.1f} °C")
+print(f"Change          : {tomorrow - temps[-1]:+.1f} °C")
+
+from tensorflow.keras.models import Model
+
+extractor = Model(inputs=model.layers[0].input, outputs=model.layers[0].output)
+states = extractor.predict(X_train[:50], verbose=0)  # shape: (50, 32)
+
+plt.figure(figsize=(12, 4))
+plt.imshow(states.T, aspect='auto', cmap='plasma')
+plt.colorbar(label='Activation')
+plt.title("LSTM Hidden State Heatmap\n(Each row = 1 neuron, Each column = 1 input window)")
+plt.xlabel("Input sequence"); plt.ylabel("Hidden unit")
+plt.tight_layout(); plt.show()
+
+print("Bright cells = strongly activated neurons")
+print("This shows which neurons 'remember' different temperature patterns.")
